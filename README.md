@@ -1,200 +1,181 @@
-Here’s a concise, professional **README.md** suitable for the `user-verifier` repository:
+<h1 align="center">🤖 Roblox User Verifier</h1>
 
----
-
-````markdown
-# Roblox User Verifier
-
-A verification system for Roblox users that automatically analyzes account authenticity, blacklist status, and activity patterns.  
-It can be used as both a **Streamlit web app** and a **command-line tool**.
+<p align="center">
+A verification system that analyzes Roblox account authenticity, blacklist status, and activity patterns.<br>
+Can be used as both a <b>Streamlit web app</b> and a <b>command-line tool</b>.
+</p>
 
 ---
 
 ## 🔍 Overview
 
-The **Roblox User Verifier** checks a player’s trustworthiness using public Roblox API data and configurable rule sets.  
-It evaluates multiple factors such as:
+**Roblox User Verifier** evaluates the trustworthiness of a Roblox account using official API data and rule-based logic.  
+It checks for account maturity, suspicious names, group affiliations, and blacklist status to help communities detect alt accounts and impersonators.
 
-- Account age  
-- Username characteristics (e.g., “alt”, impersonation, NSFW)  
-- Friend count and group activity  
-- Badge count and history  
-- Membership in known blacklisted groups  
-- Presence in internal or live blacklists
-
-The system helps Roblox communities, moderators, or recruiters quickly filter alt accounts, impersonators, and malicious users.
+### Key Analysis Metrics
+- 🧾 Account age and username quality  
+- 👥 Friend count and group membership  
+- 🏅 Badge history  
+- 🚫 Blacklisted or impersonating identities  
+- 📋 Configurable rule thresholds via `config.json`
 
 ---
 
 ## ⚙️ Features
 
-- ✅ **Two Interfaces** — Streamlit Web UI (`app.py`) and Command-Line Interface (`verification.py`)  
-- ⚡ **Fast API Access** — Uses Roblox REST APIs with caching  
-- 🔒 **Blacklist Detection** — Reads local and live blacklists from CSV or Google Sheets  
-- 🧩 **Configurable Rules** — Adjust thresholds and groups in `config.json`  
-- 📊 **Visual Reports** — Displays avatars, flags, and group/badge data  
-- 💾 **Downloadable Reports** — JSON output for recordkeeping or automation
+| Category | Description |
+|:--|:--|
+| 🧭 Interfaces | Web UI (`app.py`) and Command-Line (`verification.py`) |
+| ⚡ Performance | Cached Roblox API requests for fast lookup |
+| 🔒 Blacklist Detection | Reads local CSV or live Google Sheets |
+| ⚙️ Configurable Rules | Fully customizable via `config.json` |
+| 📊 Reports | Displays avatars, flags, groups, and badge data |
+| 💾 Export | Downloadable JSON reports for audit or automation |
 
 ---
 
-## 🧠 How It Works
+## 🧠 Verification Flow
 
-1. **Input** — Enter a Roblox username.  
-2. **Fetch** — The app queries Roblox APIs for user info, badges, friends, and groups.  
-3. **Check Rules** — The verifier runs:
+1. **Input** — Enter Roblox username  
+2. **Fetch** — Retrieve user data via Roblox APIs  
+3. **Evaluate** — Apply thresholds:
    - Account age ≥ 60 days  
    - ≥ 30 friends  
    - ≥ 13 non-BA groups  
    - ≥ 300 badges  
-   - No banned or impersonating usernames  
-   - Not part of blacklisted groups or IDs  
-4. **Decision** —  
-   - ❌ *Instant Dismissal* if blacklisted or fails major rules  
-   - ⚠️ *Red Flags* if minor issues are found  
-   - ✅ *Verified* if safe or trusted  
-5. **Output** —  
-   - Web UI: summary dashboard + downloadable JSON report  
-   - CLI: formatted terminal report
+   - No blacklisted or impersonating usernames  
+4. **Decision** —
+   - ❌ Dismissed (blacklisted or fails major rules)  
+   - ⚠️ Flagged (minor concerns)  
+   - ✅ Verified (passes all rules)
+5. **Output** —
+   - Web UI → dashboard + downloadable JSON  
+   - CLI → formatted terminal summary
 
 ---
 
-## 📦 Installation
+## 💻 Installation
 
-### 1. Clone the repository
+### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/Kapukaso/user-verifier.git
 cd user-verifier
-````
+```
 
-### 2. Install dependencies
-
+### 2️⃣ Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-If `requirements.txt` is missing, install manually:
-
+If missing:
 ```bash
 pip install streamlit requests
 ```
 
-### 3. Run locally
+### 3️⃣ Run Locally
 
-#### Web App (Streamlit)
-
+#### Web Interface
 ```bash
 streamlit run app.py
 ```
 
-Then open the provided local URL in your browser.
-
-#### Command-Line Version
-
+#### Command Line
 ```bash
 python verification.py
 ```
 
 ---
 
-## 🧰 Configuration
+## ⚙️ Configuration Guide
 
-All verification rules and IDs are stored in **`config.json`**.
+All rules are defined in **`config.json`**.
 
-Key sections:
+| Key | Purpose |
+|:--|:--|
+| `FRIENDLY_OWNER_IDS` | Trusted Roblox group owners |
+| `BA_UK_GROUP_IDS` | Official BA Roblox group IDs |
+| `BLACKLISTED_GROUP_IDS` | Suspicious group IDs |
+| `BA_BADGE_IDS` | Restricted badge indicators |
+| `IFD_BLACKLIST_IDS` | Known malicious user IDs |
+| `BA_BLACKLIST_IDS` | Blacklisted BA-related accounts |
+| `NSFW_WORDS` | Banned username keywords |
+| `BA_MEMBER_IMPERSONATION_LIST` | Impersonated BA member names |
 
-| Field                          | Purpose                                   |
-| ------------------------------ | ----------------------------------------- |
-| `FRIENDLY_OWNER_IDS`           | Trusted group owners                      |
-| `BA_UK_GROUP_IDS`              | Official British Army Roblox groups       |
-| `BLACKLISTED_GROUP_IDS`        | Suspicious or banned group IDs            |
-| `BA_BADGE_IDS`                 | Badges indicating restricted groups       |
-| `IFD_BLACKLIST_IDS`            | Known malicious or fraudulent user IDs    |
-| `BA_BLACKLIST_IDS`             | Blacklisted British Army-related accounts |
-| `NSFW_WORDS`                   | Words banned in usernames                 |
-| `BA_MEMBER_IMPERSONATION_LIST` | List of impersonated members              |
-
-You can add or remove IDs as needed.
+You can edit these fields to adapt rules to your community.
 
 ---
 
-## 🌐 Live Blacklist Support
+## 🌐 Live Blacklist Sync
 
-Optionally, you can link a **Google Sheet CSV export** URL to fetch additional blacklist IDs dynamically.
+Add a **Google Sheet CSV export URL** to dynamically load blacklists.
 
-* Must be a `docs.google.com` CSV export link.
-* Loaded dynamically when provided in the sidebar.
-
-Example:
-
+**Example:**
 ```
 https://docs.google.com/spreadsheets/d/.../export?format=csv
 ```
 
+Requirements:
+- Must be a valid `docs.google.com` CSV export link  
+- Automatically fetched during verification
+
 ---
 
-## 🧾 Output Example
+## 📊 Example Outputs
 
-### Web App Summary:
+### Streamlit Dashboard
+- Avatar and profile link  
+- Verification status with flags  
+- Expandable lists for groups/badges  
+- Downloadable JSON summary
 
-* Avatar + Roblox profile link
-* Instant dismissal or verified result
-* Red flags with details
-* Expandable lists of user groups and badges
-* Downloadable JSON report
-
-### CLI Report:
-
+### CLI Report
 ```
-Roblox User Verification Script
-==============================
-Fetching data for 'Username'...
-> Found User: DisplayName (@Username)
-> User ID: 123456789
-...
+Roblox User Verification
+========================
+User: DisplayName (@Username)
+User ID: 123456789
 Status: ✅ VERIFIED
-Total Red Flags: 1
-1. Fewer than 13 non-BA groups (10)
+Total Flags: 1
+→ Fewer than 13 non-BA groups (10)
 ```
 
 ---
 
 ## 🧩 Developer Notes
 
-* APIs used:
+**Core APIs**
+```
+https://users.roblox.com/v1/users/
+https://friends.roblox.com/v1/users/{id}/friends/count
+https://groups.roblox.com/v1/users/{id}/groups/roles
+https://badges.roblox.com/v1/users/{id}/badges
+```
 
-  * `https://users.roblox.com/v1/users/`
-  * `https://friends.roblox.com/v1/users/{id}/friends/count`
-  * `https://groups.roblox.com/v1/users/{id}/groups/roles`
-  * `https://badges.roblox.com/v1/users/{id}/badges`
-* `app.py` uses caching via `@st.cache_data` for efficiency.
-* `.devcontainer/` supports GitHub Codespaces or VS Code Dev Containers with auto-install and launch.
+**Implementation Highlights**
+- Uses Streamlit caching (`@st.cache_data`)
+- Supports VS Code Dev Containers via `.devcontainer/`
+- Config-driven and modular for easy expansion
 
 ---
 
 ## ⚠️ Limitations
 
-* Dependent on Roblox’s public APIs; rate-limited if overused.
-* Live blacklist fetching supports only Google Sheets CSV URLs.
-* Manual review still recommended for borderline cases.
+- Dependent on Roblox’s public APIs (rate-limited)
+- Google Sheets must be public CSV links
+- Manual review suggested for edge cases
 
 ---
 
 ## 📜 License
 
-This project is available under the **MIT License**.
-See the [LICENSE](LICENSE) file if present.
+Released under the **MIT License**.  
+See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🧩 Maintainer
+## 👤 Maintainer
 
-Developed by **Kapukaso**
+**Kapukaso**  
 GitHub: [Kapukaso/user-verifier](https://github.com/Kapukaso/user-verifier)
 
 ---
-
-```
-
----
-
-```
