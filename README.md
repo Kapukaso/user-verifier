@@ -197,5 +197,4 @@ GitHub: [Kapukaso/user-verifier](https://github.com/Kapukaso/user-verifier)
 
 ---
 
-**Q3:** Do you want a shorter “user-focused” README (for moderators using the web app only)?
 ```
